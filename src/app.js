@@ -1,6 +1,6 @@
 import express from 'express';
 import conectaNaDatabase from './config/dbConnect.js';
-import livro from './models/Livro.js';
+import routes from "./routes/index.js";
 
 const conexao = await conectaNaDatabase();
 
@@ -23,21 +23,17 @@ app.get('/', (req, res) => {
 });
 
 
-app.get("/livros", async (req, res) =>{
-    const listaLivros = await livro.find({});
-    res.status(200).json(listaLivros)//usamos o metodo json pq estamos passando não somente uma string
-}) 
-
 app.get("/livros/:id", async (req, res) => {
     const listaLivrosById = await livro.findById(req.params.id);
     res.status(200).json(listaLivrosById)//buscando o indice no array
 })
 
+/*
 app.post("/livros", (req, res) => {
     livros.push(req.body);
     res.status(201).send("Livro criado com sucesso");
 })
-
+*/
 app.put("/livros/:id", (req, res) => {
     const index = buscaLivro(req.params.id);
     livros[index].titulo = req.body.titulo;
