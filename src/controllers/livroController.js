@@ -58,6 +58,19 @@ class LivroController {
             res.status(500).json({message: `${erro.message} - falha na atualização por id`})            
         }
     }
+
+    static async listarLivrosPorEditora (req, res) {
+        //pegando valores por query que vem direto da url
+        const editoraQuery = req.query.editora;
+        try {
+            //fazendo um where dentro do find do mongoDB
+            const livrosPorEditora = await livro.find({editora: editoraQuery})
+            res.status(200).json(livrosPorEditora);
+        } catch (erro) {
+            res.status(500).json({message: `${erro.message} - falha na atualização por id`})            
+
+        }
+    }
 }
 
 export default LivroController;
