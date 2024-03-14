@@ -14,7 +14,17 @@ class autorController {
     //trycatch trabalhando erros e sucesso
     try {
       const novoAutor = await autor.create(req.body);
+      console.log(novoAutor);
       res.status(201).json({message : "criado com sucesso", autor: novoAutor});
+      
+      /*
+    if(novoAutor.nome !== undefined && novoAutor.nome !== ""){ 
+        
+    }else{
+        res.status(404).send({message: "Preencha todos os campos obrigatorios"});
+      }
+      */
+      
     } catch (erro) {
       next(erro);           
     }
@@ -23,7 +33,6 @@ class autorController {
   static async listaAutorId (req, res, next) {
     try {
       const idAutor = req.params.id;
-
       const listaAutorById = await autor.findById(idAutor);
       if(listaAutorById !== null){
         res.status(200).json(listaAutorById);//buscando o indice no array    
@@ -31,7 +40,6 @@ class autorController {
         //tratando erro quando o id não é localizado
         res.status(404).send({message: "Id do autor não localizado"});
       }
-      
     } catch (erro) {
       next(erro);
     }
@@ -41,9 +49,7 @@ class autorController {
     try {
       const idAutor = req.params.id;
       const dadosAtualizados = req.body;
-
       await autor.findByIdAndUpdate(idAutor, dadosAtualizados);
-
       res.status(200).send({message: "Dados atualizados com sucesso"});
     } catch (erro) {
       next(erro);
@@ -53,7 +59,6 @@ class autorController {
     try {
       const idAutor = req.params.id;
       await autor.findByIdAndRemove(idAutor);
-
       res.status(200).send({message: "livro apagado com sucecsso"});
     } catch (erro) {
       next(erro);     
