@@ -1,3 +1,4 @@
+import NaoEncontrado from "../erros/NaoEncontrado.js";
 import { autor } from "../models/Autor.js";
 
 class autorController {
@@ -15,16 +16,7 @@ class autorController {
     try {
       const novoAutor = await autor.create(req.body);
       console.log(novoAutor);
-      res.status(201).json({message : "criado com sucesso", autor: novoAutor});
-      
-      /*
-    if(novoAutor.nome !== undefined && novoAutor.nome !== ""){ 
-        
-    }else{
-        res.status(404).send({message: "Preencha todos os campos obrigatorios"});
-      }
-      */
-      
+      res.status(201).json({message : "criado com sucesso", autor: novoAutor});      
     } catch (erro) {
       next(erro);           
     }
@@ -38,7 +30,7 @@ class autorController {
         res.status(200).json(listaAutorById);//buscando o indice no array    
       }else{
         //tratando erro quando o id não é localizado
-        res.status(404).send({message: "Id do autor não localizado"});
+        next(new NaoEncontrado("Id do autor não localizado"));
       }
     } catch (erro) {
       next(erro);
