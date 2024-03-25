@@ -8,6 +8,6 @@ RUN rm -rf node_modules
 
 RUN npm i
 
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
  
 EXPOSE 5002
