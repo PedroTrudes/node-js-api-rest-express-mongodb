@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:latest
 
 WORKDIR /node-js-api-rest-express-mongodb
 
@@ -8,6 +8,6 @@ RUN rm -rf node_modules
 
 RUN npm i
 
-CMD ["node", "start"]
-
+CMD ["node", "server.js"]
+ 
 EXPOSE 5002
