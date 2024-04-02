@@ -16,10 +16,11 @@ class LivroController {
     const novoLivro = req.body;
     //trycatch trabalhando erros e sucesso
     try {
-      const autorEncontrado = await autor.findById(novoLivro.autor);
+      const autorEncontrado = await autor.findById(novoLivro.autor);//passando o campo do autor e verificando no banco se esse valor existe
       const livroCompleto = {...novoLivro, autor: { ...autorEncontrado._doc}};
       // eslint-disable-next-line no-unused-vars
       const livroCriado = await livro.create(livroCompleto);
+      console.log(livroCriado);
       res.status(201).json({message : "criado com sucesso", livro: novoLivro});
     } catch (erro) {
       next(erro);

@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
-
+//Conexão em banco no docker: DB_CONNECTION_STRING
 
 async function conectaNaDatabase() {
-  mongoose.connect(process.env.DB_CONNECTION_STRING);
+  //conexão em banco de desenvolvimento 
+  mongoose.connect(process.env.DB_CONNECTION_STRING_DEV);
   return mongoose.connection;
 } 
 
