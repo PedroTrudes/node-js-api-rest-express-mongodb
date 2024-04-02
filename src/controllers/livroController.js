@@ -1,4 +1,5 @@
 import { autor } from "../models/Autor.js";
+import NaoEncontrado from "../erros/NaoEncontrado.js";
 import livro from "../models/Livro.js";
 
 class LivroController {
@@ -17,11 +18,14 @@ class LivroController {
     //trycatch trabalhando erros e sucesso
     try {
       const autorEncontrado = await autor.findById(novoLivro.autor);//passando o campo do autor e verificando no banco se esse valor existe
-      const livroCompleto = {...novoLivro, autor: { ...autorEncontrado._doc}};
-      // eslint-disable-next-line no-unused-vars
-      const livroCriado = await livro.create(livroCompleto);
-      console.log(livroCriado);
-      res.status(201).json({message : "criado com sucesso", livro: novoLivro});
+      if(autorEncontrado != null){
+        const livroCompleto = {...novoLivro, autor: { ...autorEncontrado._doc}};
+        // eslint-disable-next-line no-unused-vars
+        const livroCriado = await livro.create(livroCompleto);
+        res.status(201).json({message : "criado com sucesso", livro: novoLivro});
+      }else{
+        next(new NaoEncontrado("Id do autor não localizado"));
+      }
     } catch (erro) {
       next(erro);
     }
@@ -30,7 +34,11 @@ class LivroController {
   static async listaLivrosId (req, res, next) {
     try {
       const listaLivrosById = await livro.findById(req.params.id);
-      res.status(200).json(listaLivrosById);//buscando o indice no array    
+      if(listaLivrosById != null) {
+        res.status(200).json(listaLivrosById);//buscando o indice no array    
+      }else{
+        next(new NaoEncontrado("Id do livro não localizado"));
+      }
     } catch (erro) {
       next(erro);
     }
@@ -41,19 +49,26 @@ class LivroController {
       const idLivro = req.params.id;
       const dadosAtualizados = req.body;
 
-      await livro.findByIdAndUpdate(idLivro, dadosAtualizados);
-
-      res.status(200).send({message: "Dados atualizados com sucesso"});
+      const updateByIdLivro = await livro.findByIdAndUpdate(idLivro, dadosAtualizados);
+      if(updateByIdLivro != null){
+        res.status(200).send({message: "Dados atualizados com sucesso"});
+      }else{
+        next(new NaoEncontrado("Id do livro não localizado"));
+      }
     } catch (erro) {
       next(erro);
     }
   }
+
   static async apagarLivro (req,res, next) {
     try {
       const idLivro = req.params.id;
-      await livro.findByIdAndRemove(idLivro);
-
-      res.status(200).send({message: "livro apagado com sucecsso"});
+      const removedById = await livro.findByIdAndRemove(idLivro);
+      if(removedById != null){
+        res.status(200).send({message: "livro apagado com sucecsso"});
+      }else{
+        next(new NaoEncontrado("Id do livro não localizado"));
+      }
     } catch (erro) {
       res.status(500).json({message: `${erro.message} - falha na atualização por id`});   
       next(erro);    

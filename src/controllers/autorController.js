@@ -41,8 +41,12 @@ class autorController {
     try {
       const idAutor = req.params.id;
       const dadosAtualizados = req.body;
-      await autor.findByIdAndUpdate(idAutor, dadosAtualizados);
-      res.status(200).send({message: "Dados atualizados com sucesso"});
+      const updatedById = await autor.findByIdAndUpdate(idAutor, dadosAtualizados);
+      if(updatedById != null){
+        res.status(200).send({message: "Dados atualizados com sucesso"});
+      }else{
+        next(new NaoEncontrado("Id não localizado"));
+      }
     } catch (erro) {
       next(erro);
     }
@@ -50,8 +54,12 @@ class autorController {
   static async apagarAutor (req, res, next) {
     try {
       const idAutor = req.params.id;
-      await autor.findByIdAndRemove(idAutor);
-      res.status(200).send({message: "livro apagado com sucecsso"});
+      const removedByID = await autor.findByIdAndRemove(idAutor);
+      if(removedByID != null){
+        res.status(200).send({message: "livro apagado com sucecsso"});
+      }else{
+        next(new NaoEncontrado("Id não localizado"));  
+      }
     } catch (erro) {
       next(erro);     
     }
