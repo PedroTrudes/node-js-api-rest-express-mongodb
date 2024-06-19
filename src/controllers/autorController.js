@@ -56,7 +56,7 @@ class autorController {
       const idAutor = req.params.id;
       const removedByID = await autor.findByIdAndRemove(idAutor);
       if(removedByID != null){
-        res.status(200).send({message: "livro apagado com sucecsso"});
+        res.status(200).send({message: "Autor excluido com sucesso"});
       }else{
         next(new NaoEncontrado("Id não localizado"));  
       }
