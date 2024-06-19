@@ -13,9 +13,9 @@ class LivroController {
     }
   }
 
+  //refatorar esse modelo de pesquisar autor
   static async cadastrarLivro(req, res, next) {
     const novoLivro = req.body;
-    //trycatch trabalhando erros e sucesso
     try {
       const autorEncontrado = await autor.findById(novoLivro.autor);//passando o campo do autor e verificando no banco se esse valor existe
       if(autorEncontrado != null){
